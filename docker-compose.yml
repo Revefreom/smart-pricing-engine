@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  # Servis 1: Veritabanı (PostgreSQL)
+  db:
+    image: postgres:15
+    container_name: otel_db
+    environment:
+      POSTGRES_USER: admin      # Kullanıcı adın
+      POSTGRES_PASSWORD: sifre123 # Şifren (Geliştirme ortamı için basit tuttum)
+      POSTGRES_DB: otel_db      # Oluşacak veritabanı adı
+    ports:
+      - "5432:5432" # Dış dünya (senin pc) : İç dünya (konteyner)
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data # Veriler silinmesin diye yedeği klasöre alıyoruz
+
+  # Servis 2: Yönetim Paneli (pgAdmin)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: otel_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
