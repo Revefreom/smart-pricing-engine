@@ -1,12 +1,15 @@
+import sys
+import os
+from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from main import app
 from models import Room
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import sys
 
-# Setup DB connection
-DATABASE_URL = "postgresql://admin:sifre123@localhost:5432/otel_db"
+load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 try:
     engine = create_engine(DATABASE_URL)
     SessionLocal = sessionmaker(bind=engine)
