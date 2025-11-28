@@ -14,9 +14,6 @@ load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 
-# Veritabanı bağlantı bilgileri
-DATABASE_URL = "postgresql://admin:sifre123@localhost:5432/otel_db"
-
 # Engine ve SessionLocal oluşturma
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
