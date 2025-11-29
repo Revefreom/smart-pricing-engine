@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, func, DECIMAL, CheckConstraint
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, func, DECIMAL, CheckConstraint, Date
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.sql import func
 
@@ -30,6 +30,25 @@ class Room(Base):
 
     # İlişki: Her oda bir otele aittir
     hotel = relationship("Hotel", back_populates="rooms")
+    
+    # İlişki: Bir odanın birden fazla rezervasyonu olabilir
+    bookings = relationship("Booking", back_populates="room", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Room(type='{self.room_type}', price={self.base_price})>"
+
+class Booking(Base):
+    __tablename__ = 'bookings'
+
+    id = Column(Integer, primary_key=True, index=True)
+    room_id = Column(Integer, ForeignKey('rooms.id'), nullable=False)
+    customer_email = Column(String, nullable=False)
+    check_in = Column(Date, nullable=False)
+    check_out = Column(Date, nullable=False)
+    total_price = Column(Float, nullable=False)
+
+    # İlişki: Her rezervasyon bir odaya aittir
+    room = relationship("Room", back_populates="bookings")
+
+    def __repr__(self):
+        return f"<Booking(customer='{self.customer_email}', room_id={self.room_id})>"
